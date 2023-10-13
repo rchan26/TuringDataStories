@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Turing Data Stories - Exploring trends in UK academia using PhD thesis metadata</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Turing Data Stories</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/alan-turing-institute/turingdatastories" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Exploring trends in UK academia using PhD thesis metadata</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="markus-hauru-january-2020" class="level4">
+<h4 class="anchored" data-anchor-id="markus-hauru-january-2020">Markus Hauru, January 2020</h4>
+<p>The British Library operates its <a href="https://ethos.bl.uk">Electronic Theses Online Service</a> or EThOS, that keeps track of PhD theses accepted at UK higher education institutions. The Library also makes public a <a href="https://data.bl.uk/ethos/">data set</a> of metadata for all theses in their catalogue. Quoting their website,</p>
+<blockquote class="blockquote">
+<p>The EThOS dataset lists virtually all UK doctoral theses ever awarded, some 500,000 dating back to 1787. All UK HE institutions are included, but we estimate records are missing for around 10,000 titles (2%).</p>
+</blockquote>
+<p>The latest version of the dataset is from March 2018. The data includes the title, year, author, and institution for each thesis, as well as a link to a full record which may or may not include things like keywords or access to full texts.</p>
+<p>In this notebook I explore this EThOS dataset to identify historical trends in UK academia. The notebook is structured roughly as follows: * Prepare the data for analysis * Study the number of PhDs produced as a function of institution and year * Study trends in the popularities of individual words appearing in thesis titles * Use a co-occurrence graph of words in thesis titles to detect academic fields, and score thesis titles on which field(s) they seem to belong to * Use the above to study trends in the popularity of different academic fields</p>
+<p>On the way we will for instance see a dramatic shift in the structure of UK academia in the 60s and 70s, look at some of the trendiest academic buzzwords of each decade since the 30s, and find out whether Cambridge really is more science-oriented than Oxford.</p>
+<p>While I hope the findings here are of interest in themselves, this notebook is also an exercise for myself, to learn some basic exploratory data science tools and techniques, like basics of pandas, some network analysis, and new visualization techniques.</p>
+<p>Many thanks go to Henri Seijo for some great feedback on this notebook.</p>
+</section>
+<section id="setting-up-and-preparing-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up-and-preparing-the-data">Setting up and preparing the data</h2>
+<p>First off, some imports of python libraries we’ll be needing, and loading the data file into a pandas DataFrame. The script will automatically download the data file into the current working directory if it isn’t there yet.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Installing the `community` module.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> I dislike installing packages without asking users</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># first, but not sure what the best solution here is.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># !pip3 install python-louvain</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> operator <span class="im">as</span> opr</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy <span class="im">as</span> sp</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> community  <span class="co"># Network community finding</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.colors</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> set_matplotlib_formats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at https://github.com/Homebrew/homebrew-core/issues/76621
+Requirement already satisfied: python-louvain in /opt/homebrew/lib/python3.9/site-packages (0.16)
+Requirement already satisfied: networkx in /opt/homebrew/lib/python3.9/site-packages (from python-louvain) (2.6.3)
+Requirement already satisfied: numpy in /opt/homebrew/lib/python3.9/site-packages (from python-louvain) (1.22.1)
+DEPRECATION: Configuring installation scheme with distutils config files is deprecated and will no longer work in the near future. If you are using a Homebrew or Linuxbrew Python, please see discussion at https://github.com/Homebrew/homebrew-core/issues/76621</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For pretty and exportable matplotlib plots.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If you are running this yourself and want interactivity,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># try `%matplotlib widget` instead.</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>set_matplotlib_formats(<span class="st">'svg'</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a consistent plotting style across the notebook using Seaborn.</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">"darkgrid"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>sns.set_context(<span class="st">"notebook"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/wk/zmsrlr9s2cgdpdnqj5d522sw0000gr/T/ipykernel_41528/205340543.py:4: DeprecationWarning: `set_matplotlib_formats` is deprecated since IPython 7.23, directly use `matplotlib_inline.backend_inline.set_matplotlib_formats()`
+  set_matplotlib_formats('svg')</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>datafile <span class="op">=</span> <span class="st">"EThOSCSV_201803.csv"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.isfile(datafile):</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Download and/or unzip the data file from the EThOS website.</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># We need a couple more imports for this.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> zipfile</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    datazip <span class="op">=</span> <span class="st">"EThOSCSV_201803.zip"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.isfile(datazip):</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="im">import</span> requests</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        dataurl <span class="op">=</span> <span class="st">"https://data.bl.uk/ethos/EThOSCSV201803.zip"</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> requests.Session() <span class="im">as</span> s:</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            headers <span class="op">=</span> {</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                <span class="st">"User-agent"</span>: <span class="st">"Mozilla/5.0 (X11; Linux i686; rv:64.0) Gecko/20100101 Firefox/64.0"</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>            r <span class="op">=</span> s.get(dataurl, headers<span class="op">=</span>headers)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">with</span> <span class="bu">open</span>(datazip, <span class="st">"wb"</span>) <span class="im">as</span> f:</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                f.write(r.content)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> zipfile.ZipFile(datazip, <span class="st">"r"</span>) <span class="im">as</span> z:</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        z.extractall(<span class="st">"."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(datafile, encoding<span class="op">=</span><span class="st">"ISO-8859-2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To get an idea of what the rows in the DataFrame look like, here are some samples:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Title</th>
+<th data-quarto-table-cell-role="th">Author</th>
+<th data-quarto-table-cell-role="th">Institution</th>
+<th data-quarto-table-cell-role="th">Date</th>
+<th data-quarto-table-cell-role="th">Qualification</th>
+<th data-quarto-table-cell-role="th">EThOS URL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Computation and measurement of turbulent flow ...</td>
+<td>Loizou, Panos A.</td>
+<td>University of Manchester</td>
+<td>1989.0</td>
+<td>Thesis (Ph.D.)</td>
+<td>http://ethos.bl.uk/OrderDetails.do?uin=uk.bl.e...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Prolactin and growth hormone secretion in norm...</td>
+<td>Prescott, R. W. G.</td>
+<td>University of Newcastle upon Tyne</td>
+<td>1983.0</td>
+<td>Thesis (Ph.D.)</td>
+<td>http://ethos.bl.uk/OrderDetails.do?uin=uk.bl.e...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Influence of strain fields on flame propagation</td>
+<td>Mendes-Lopes, J. M. C.</td>
+<td>University of Cambridge</td>
+<td>1983.0</td>
+<td>Thesis (Ph.D.)</td>
+<td>http://ethos.bl.uk/OrderDetails.do?uin=uk.bl.e...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Connectivity, flow and transport in network mo...</td>
+<td>Robinson, Peter Clive</td>
+<td>University of Oxford</td>
+<td>1984.0</td>
+<td>Thesis (Ph.D.)</td>
+<td>http://ethos.bl.uk/OrderDetails.do?uin=uk.bl.e...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>The theory and implementation of a high qualit...</td>
+<td>Lower, K. N.</td>
+<td>University of Bristol</td>
+<td>1985.0</td>
+<td>Thesis (Ph.D.)</td>
+<td>http://ethos.bl.uk/OrderDetails.do?uin=uk.bl.e...</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The first observation to make is that the data is remarkably clean. There are a few NaNs that we need to drop:</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of rows with NaNs: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(df.isnull().<span class="bu">any</span>(axis<span class="op">=</span><span class="dv">1</span>).<span class="bu">sum</span>()))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of rows with NaNs: 13</code></pre>
+</div>
+</div>
+<p>but with that done, there’s little else to do. The Qualification column holds some oddities and misunderstandings, and there are few suspiciously short titles (my favourite being the 1977 thesis called “Beds”), but other than that, things seem in order. Most notably, the Institution and Date fields, which we’ll be getting a lot of mileage from, seem spotless, without even a single typoed university name. The Dates are all just years, so I convert them to an integer type and rename the column.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"Date"</span>] <span class="op">=</span> df[<span class="st">"Date"</span>].astype(np.int64)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df.rename(columns<span class="op">=</span>{<span class="st">"Date"</span>: <span class="st">"Year"</span>}, inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What is of some concern are the 10,000 or so theses that the British Library estimates are missing from the data set. Nowadays that’s about a year’s worth of theses, but it’s also roughly the total number of theses in the data from before 1956. Now clearly some of the missing ones are from the last few years: Even though the data set is from 2018, the number of theses in it drops sharply after 2015. But there’s probably a significant number missing from the early years as well, especially considering issues of record keeping. To illustrate the late and early parts of the data set:</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>thesiscounts_by_year <span class="op">=</span> df.Year.value_counts().sort_index()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">3</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>ax1.plot(thesiscounts_by_year.loc[<span class="dv">2005</span>:])</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Number of PhD theses"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Year"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>ax2.plot(thesiscounts_by_year.loc[:<span class="dv">1940</span>])</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Year"</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="ethos_files/figure-html/cell-10-output-1.svg" class="img-fluid"></p>
+</div>
+</div>
+<p>Thus, to get a more reliable data set, I chop off parts from both ends. 2015 is clearly the natural late cutoff, since I doubt the PhD output has actually collapsed in the last few years. At the early end, before the end of WW1 the sample sizes for each year are clearly quite low, and based on this, as well as some odd features of the data pre-WW1, I’ve chosen to set the early cutoff at 1925.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>late_cutoff <span class="op">=</span> <span class="dv">2015</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>early_cutoff <span class="op">=</span> <span class="dv">1925</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>thesiscounts_by_year <span class="op">=</span> thesiscounts_by_year.loc[early_cutoff:late_cutoff]</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[(early_cutoff <span class="op">&lt;=</span> df.Year) <span class="op">&amp;</span> (df.Year <span class="op">&lt;=</span> late_cutoff)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I also drop the columns we won’t be using for anything. Makes for nicer reading when we print out slices of the DataFrame</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df.drop([<span class="st">"Qualification"</span>, <span class="st">"EThOS URL"</span>], axis<span class="op">=</span><span class="dv">1</span>, inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="when-and-where-number-of-theses-per-year-and-institution" class="level2">
+<h2 class="anchored" data-anchor-id="when-and-where-number-of-theses-per-year-and-institution">When and where: Number of theses per year and institution</h2>
+<p>With that basic setup out of the way, let’s get into this.</p>
+<p>First, a look at the number of PhD theses accepted in the UK over our chosen time period.</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>ax.semilogy(thesiscounts_by_year)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Number of PhD theses."</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Year"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>ax.xaxis.set_major_locator(plt.MultipleLocator(<span class="dv">10</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="ethos_files/figure-html/cell-13-output-1.svg" class="img-fluid"></p>
+</div>
+</div>
+<p>Note the logarithmic vertical axis. The two word summary here would clearly be “exponential growth”. In 1925 a bit more than a hundred PhDs were awarded, and now we are approaching 20 000 per year. The most notable features on the way are * a huge dip during WW2 in the middle of the otherwise steady exponential period from 1925 to 1960. (In the early-times plot a couple of cells above you can also see a dip during WW1, although the signal there is more noisy.) There’s also a bump a few years after WW2, presumably from people who postponed the start of their studies until after the war and are then graduating in large batches. * a period of even faster exponential growth in the 1960-1975 window. One explanation for this is baby boomers hitting typical PhD age (compare the above to a UK birth rate plot <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/livebirths/bulletins/birthsummarytablesenglandandwales/2017">here</a> and shift by 25 or so years), but probably the most important driver of this growth is the huge structural change in academia that we’ll see in a moment. * a more moderate but steady pace from roughly 1975 onwards.</p>
+<p>Note that when I talk about rate or pace of growth here I’m talking in multiplicative terms, meaning for instance that since 1975 the number of new PhDs has been growing by a roughly constant <em>percentage</em> per year, not a constant number.</p>
+<p>Next let’s look at the contributions of different institutions to the total output of PhDs.</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>thesiscounts_by_yearandinst <span class="op">=</span> (</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">"Institution"</span>, <span class="st">"Year"</span>])</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    .size()</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    .unstack(<span class="st">"Institution"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    .fillna(<span class="fl">0.0</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort institutions based on PhD output in the last year of the time window.</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>thesiscounts_by_yearandinst <span class="op">=</span> thesiscounts_by_yearandinst.sort_values(</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    late_cutoff, axis<span class="op">=</span><span class="st">"columns"</span>, ascending<span class="op">=</span><span class="va">False</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the proportion of PhDs produced by each institution by year.</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>instratios_by_year <span class="op">=</span> thesiscounts_by_yearandinst.divide(</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    thesiscounts_by_year, axis<span class="op">=</span><span class="st">"index"</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We can't show the full legend with dozens of entries, so we restrict to a few</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># of the most important ones.</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>num_legendentries <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>num_entries <span class="op">=</span> <span class="bu">len</span>(instratios_by_year.columns)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the names and indices of the institutions that will cover the largest</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># area in this plot. Sort them by index.</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>instratio_sums <span class="op">=</span> instratios_by_year.<span class="bu">sum</span>().sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>top_insts <span class="op">=</span> instratio_sums.index[:num_legendentries]</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>top_inds <span class="op">=</span> [<span class="bu">list</span>(instratios_by_year.columns).index(inst) <span class="cf">for</span> inst <span class="kw">in</span> top_insts]</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>top_inds, top_insts <span class="op">=</span> <span class="bu">zip</span>(<span class="op">*</span><span class="bu">sorted</span>(<span class="bu">zip</span>(top_inds, top_insts)))</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Pick colors that highlight the entries in the legend.</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>legend_colors <span class="op">=</span> sns.color_palette(<span class="st">"dark"</span>, n_colors<span class="op">=</span>num_legendentries)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Color all the other entries with the same shade of gray, which we pick to be</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co"># one of the highlight colors desaturated.</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>default_color <span class="op">=</span> sns.set_hls_values(legend_colors[<span class="dv">1</span>], s<span class="op">=</span><span class="fl">0.0</span>)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>all_colors <span class="op">=</span> [default_color] <span class="op">*</span> num_entries</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Put the highlight colors at the right positions in the list of all colors.</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, c <span class="kw">in</span> <span class="bu">zip</span>(top_inds, legend_colors):</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    all_colors[i] <span class="op">=</span> c</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Make an exception to the general style by giving this plot ticks.</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>style_dict <span class="op">=</span> {<span class="st">"xtick.bottom"</span>: <span class="va">True</span>, <span class="st">"ytick.left"</span>: <span class="va">True</span>}</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> sns.axes_style(style_dict):</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>))</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> plt.stackplot(</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>        instratios_by_year.index,</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>        instratios_by_year.values.T,</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>        colors<span class="op">=</span>all_colors,</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>        lw<span class="op">=</span><span class="fl">0.05</span>,</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Proportion of PhDs"</span>)</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"Year"</span>)</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="fl">0.0</span>, <span class="fl">1.0</span>)</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>    plt.xlim(early_cutoff, late_cutoff)</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Some fancy formatting of the legend. We show the most important legend</span></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># entries in the same order that they appear in in the figure and position</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># the legend out of the way.</span></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>    top_lines <span class="op">=</span> [lines[i] <span class="cf">for</span> i <span class="kw">in</span> top_inds]</span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>    plt.legend(</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>        <span class="bu">reversed</span>(top_lines),</span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>        <span class="bu">reversed</span>(top_insts),</span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>        loc<span class="op">=</span><span class="st">"lower left"</span>,</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>        bbox_to_anchor<span class="op">=</span>(<span class="fl">1.0</span>, <span class="fl">0.0</span>),</span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="ethos_files/figure-html/cell-15-output-1.svg" class="img-fluid"></p>
+</div>
+</div>
+<p>This plot shows the proportion of PhDs coming from different universities, each grey or colored band being one institution. The institutions are ordered by the number of PhDs they produced in 2015, with the largest one being Oxford at the bottom. The colors and the legend highlight a few of the most historically prominent instutions (the ones that get the largest area in the above plot).</p>
+<p>Here we can see the drastic change in the structure of higher education between roughly 1960 and 1980 that I mentioned above: There’s an explosion in the proportion of PhDs coming from small universities. Until 1960 or so Oxford, Cambridge and Edinburgh produced 70-80% of PhDs in the country. By 1980 it was around 20%, and has stayed roughly constant since. They remain the largest PhD factories, but the field has been filled with dozens of smaller institutions.</p>
+<p>A bit of Wikipedia browsing gives some context for this. During the shift period many new universities were founded (Sussex 1961, York 1963, Warwick 1965, …), many others expanded greatly, and various colleges and other educational institutions were turned into universities. I’m not a historian, but for some background check Wikipedia on for instance the <a href="https://en.wikipedia.org/wiki/University_Grants_Committee_(United_Kingdom)">University Grant Committee</a>, <a href="https://en.wikipedia.org/wiki/Robbins_Report">Robbins Report</a>, and <a href="https://en.wikipedia.org/wiki/Education_Act_1962">Education Act of 1962</a>. I was previously aware that there was an expansion of higher education in many Western countries around this time, but the magnitude and speed of the shift in the above plot surprised me.</p>
+<p>There are also some interesting individual stories in this same plot. Oxford used to dominate its rival Cambridge with a doctoral output several times larger until the late 60s, after which the two have been roughly equal. Even Oxford was for a time ecplised by Edinburgh though, which in some years produced more than 40% of all PhDs in the UK. The historical importance of Scotland was further bolstered by Aberdeen, which used to be one of the major players until the 60s, but is now just another mid-sized entry. (It should be said though that I suspect that the early years may suffer from a significant number of missing theses, that may skew the data to some degree. The main qualitative statement probably still stands though.) Imperial has a bulge of activity during the 1960s as it went through <a href="https://en.wikipedia.org/wiki/Imperial_College_London#20th_century">a rapid expansion</a>, a bit before many others followed suit.</p>
+<p>Just to underline the fact that the fall in the relative importance of the top few institutions is not at all due to shrinking on their part but merely the growth of others, here are the absolute numbers of PhDs produced by the 4 institutions that contributed the most in 1960.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>num_insts <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>counts_top <span class="op">=</span> thesiscounts_by_yearandinst.sort_values(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1960</span>, axis<span class="op">=</span><span class="dv">1</span>, ascending<span class="op">=</span><span class="va">False</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>counts_top <span class="op">=</span> counts_top.iloc[:, :num_insts]</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare to a format that sns.FacetGrid likes.</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>counts_top <span class="op">=</span> (</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    counts_top.unstack().reset_index().rename(columns<span class="op">=</span>{<span class="dv">0</span>: <span class="st">"Number of theses"</span>})</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.FacetGrid(</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    counts_top, col<span class="op">=</span><span class="st">"Institution"</span>, col_wrap<span class="op">=</span><span class="dv">2</span>, sharey<span class="op">=</span><span class="va">True</span>, sharex<span class="op">=</span><span class="va">True</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>g.<span class="bu">map</span>(plt.plot, <span class="st">"Year"</span>, <span class="st">"Number of theses"</span>).set_titles(<span class="st">"</span><span class="sc">{col_name}</span><span class="st">"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="ethos_files/figure-html/cell-16-output-1.svg" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="what-are-titles-made-of" class="level2">
+<h2 class="anchored" data-anchor-id="what-are-titles-made-of">What are titles made of?</h2>
+<p>So far we’ve only looked at where and when PhD theses have been written. The dataset doesn’t hold that much more information to toy with. It doesn’t list departments or faculties, keywords or research fields, nor do I have easy access to full texts of the theses. But what it does have is the titles of these theses. Let’s see what we can learn from them.</p>
+<section id="setting-up-the-title-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="setting-up-the-title-analysis">Setting up the title analysis</h3>
+<p>Before we get to looking at trends in titles, we need to spend a moment setting up some machinery that we can then milk.</p>
+<p>Thesis titles aren’t exactly prose. They typically aren’t full sentences and their grammatical forms vary wildly, which makes analysis of their linguistic structure tricky and, I would guess, in many cases a bit futile. Unlike with more structured text, almost as much information as in the title itself is contained in just a list of words appearing in the title. Lists of words are also easy to analyse, so we’ll go with that.</p>
+<p>To start, I strip the titles of any punctation and so called stop words like articles and prepositions that don’t tell us much, and make everything lower case. I could also do what’s called stemming, and collapse for instance “study”, “studies”, “studied” and “studying” all into a single word. I choose not to do this because as we’ll see below, different inflections of the same stem word sometimes appear in significantly different kinds of titles. Moreover, with academic vocabulary, doing this properly isn’t straight-forward: the stemming algorithm should for instance know to combine “phenomenon” and “phenomena”, but perhaps not “phenomenal” or “phenomenology”, and certainly not “phenolic”. A quick experiment that I did with one stemmer also suggested that the results we’ll be seeing wouldn’t be greatly affected.</p>
+<p>Another choice I make is to remove hyphens as unnecessary punctuation. Here you lose some and you win some. “Post-modern” should certainly be grouped together with “postmodern”, but “biodiversity-ecosystem” (which appears in 5 titles) would be better split into two words.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> splitstr(s):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">""" For a string, remove most punctuation, lower case, and split into</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">    words. Return the unique words.</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    puncts <span class="op">=</span> <span class="st">"!</span><span class="ch">\"</span><span class="st">&amp;'(),./:;&lt;=&gt;?[</span><span class="ch">\\</span><span class="st">]`{|}-"</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    words <span class="op">=</span> s.lower().translate(<span class="bu">str</span>.maketrans(<span class="st">""</span>, <span class="st">""</span>, puncts)).split()</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove duplicates. We don't care if a word occurs multiple times in</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># the same title.</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    words <span class="op">=</span> <span class="bu">tuple</span>(<span class="bu">set</span>(words))</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> words</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> filter_stopwords(words):</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">""" Take a list of strings, filter out prepositions, articles, and other</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co">    stop words.  We use a list of English stop words found here:</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co">    https://www.textfixer.com/tutorials/common-english-words.txt</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stop black (the code formatter) from automatically splitting this</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># across a gazillion lines with the fmt: off/on.</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fmt: off</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    stops <span class="op">=</span> [<span class="st">"a"</span>, <span class="st">"able"</span>, <span class="st">"about"</span>, <span class="st">"across"</span>, <span class="st">"after"</span>, <span class="st">"all"</span>, <span class="st">"almost"</span>, <span class="st">"also"</span>, <span class="st">"am"</span>, <span class="st">"among"</span>, <span class="st">"an"</span>, <span class="st">"and"</span>, <span class="st">"any"</span>, <span class="st">"are"</span>, <span class="st">"as"</span>, <span class="st">"at"</span>, <span class="st">"be"</span>, <span class="st">"because"</span>, <span class="st">"been"</span>, <span class="st">"but"</span>, <span class="st">"by"</span>, <span class="st">"can"</span>, <span class="st">"cannot"</span>, <span class="st">"could"</span>, <span class="st">"dear"</span>, <span class="st">"did"</span>, <span class="st">"do"</span>, <span class="st">"does"</span>, <span class="st">"either"</span>, <span class="st">"else"</span>, <span class="st">"ever"</span>, <span class="st">"every"</span>, <span class="st">"for"</span>, <span class="st">"from"</span>, <span class="st">"get"</span>, <span class="st">"got"</span>, <span class="st">"had"</span>, <span class="st">"has"</span>, <span class="st">"have"</span>, <span class="st">"he"</span>, <span class="st">"her"</span>, <span class="st">"hers"</span>, <span class="st">"him"</span>, <span class="st">"his"</span>, <span class="st">"how"</span>, <span class="st">"however"</span>, <span class="st">"i"</span>, <span class="st">"if"</span>, <span class="st">"in"</span>, <span class="st">"into"</span>, <span class="st">"is"</span>, <span class="st">"it"</span>, <span class="st">"its"</span>, <span class="st">"just"</span>, <span class="st">"least"</span>, <span class="st">"let"</span>, <span class="st">"like"</span>, <span class="st">"likely"</span>, <span class="st">"may"</span>, <span class="st">"me"</span>, <span class="st">"might"</span>, <span class="st">"most"</span>, <span class="st">"must"</span>, <span class="st">"my"</span>, <span class="st">"neither"</span>, <span class="st">"no"</span>, <span class="st">"nor"</span>, <span class="st">"not"</span>, <span class="st">"of"</span>, <span class="st">"off"</span>, <span class="st">"often"</span>, <span class="st">"on"</span>, <span class="st">"only"</span>, <span class="st">"or"</span>, <span class="st">"other"</span>, <span class="st">"our"</span>, <span class="st">"own"</span>, <span class="st">"rather"</span>, <span class="st">"said"</span>, <span class="st">"say"</span>, <span class="st">"says"</span>, <span class="st">"she"</span>, <span class="st">"should"</span>, <span class="st">"since"</span>, <span class="st">"so"</span>, <span class="st">"some"</span>, <span class="st">"than"</span>, <span class="st">"that"</span>, <span class="st">"the"</span>, <span class="st">"their"</span>, <span class="st">"them"</span>, <span class="st">"then"</span>, <span class="st">"there"</span>, <span class="st">"these"</span>, <span class="st">"they"</span>, <span class="st">"this"</span>, <span class="st">"tis"</span>, <span class="st">"to"</span>, <span class="st">"too"</span>, <span class="st">"twas"</span>, <span class="st">"us"</span>, <span class="st">"wants"</span>, <span class="st">"was"</span>, <span class="st">"we"</span>, <span class="st">"were"</span>, <span class="st">"what"</span>, <span class="st">"when"</span>, <span class="st">"where"</span>, <span class="st">"which"</span>, <span class="st">"while"</span>, <span class="st">"who"</span>, <span class="st">"whom"</span>, <span class="st">"why"</span>, <span class="st">"will"</span>, <span class="st">"with"</span>, <span class="st">"would"</span>, <span class="st">"yet"</span>, <span class="st">"you"</span>, <span class="st">"your"</span>]</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fmt: on</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">tuple</span>(word <span class="cf">for</span> word <span class="kw">in</span> words <span class="cf">if</span> word <span class="kw">not</span> <span class="kw">in</span> stops)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"Words"</span>] <span class="op">=</span> df[<span class="st">"Title"</span>].<span class="bu">apply</span>(splitstr).<span class="bu">apply</span>(filter_stopwords)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To get the title analysis going, we want three different objects: * A DataFrame that lists the total number of titles in which each word appears. * The same thing but now per year. (We could do per institution as well, but let’s leave that for later.) * A so called co-occurrence graph (or network), i.e.&nbsp;a weighted graph where nodes are words and edges tell us which words appear together in titles and how often.</p>
+<p>First, the easy bit, just counting word occurrences per year.</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>wordcounts_by_year <span class="op">=</span> (</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    df.groupby(<span class="st">"Year"</span>)[<span class="st">"Words"</span>]</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">apply</span>(<span class="kw">lambda</span> x: pd.Series(np.concatenate(x.tolist())).value_counts())</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    .unstack(<span class="st">"Year"</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    .fillna(<span class="fl">0.0</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    .T</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>total_wordcounts <span class="op">=</span> wordcounts_by_year.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort both total_wordcounts and wordcounts_by_year to have the most common</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># words first.</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>order <span class="op">=</span> (<span class="op">-</span>total_wordcounts).argsort()</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>total_wordcounts <span class="op">=</span> total_wordcounts[order]</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>allwords <span class="op">=</span> total_wordcounts.index</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>wordcounts_by_year <span class="op">=</span> wordcounts_by_year.reindex(allwords, axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s also compute the occurrences of each word per 1000 theses, in each given year, to measure their relative popularity.</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>wordratios_by_year <span class="op">=</span> <span class="dv">1000</span> <span class="op">*</span> wordcounts_by_year.divide(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    thesiscounts_by_year, axis<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Making the co-occurrence graph requires some thought. First off, we’ve got around 190,000 distinct words in about 450,000 titles (academics like their jargon). However, only 20,000 or so of them appear in more than 10 thesis titles.</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>wordcount_cutoff <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Number of unique words: </span><span class="sc">{}</span><span class="st">. Number of theses: </span><span class="sc">{}</span><span class="st">. Number of words with more than </span><span class="sc">{}</span><span class="st"> occurrences: </span><span class="sc">{}</span><span class="st">."</span>.<span class="bu">format</span>(</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">len</span>(total_wordcounts),</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">len</span>(df),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>        wordcount_cutoff,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>        (total_wordcounts <span class="op">&gt;</span> wordcount_cutoff).<span class="bu">sum</span>(),</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of unique words: 190252. Number of theses: 451755. Number of words with more than 10 occurrences: 21584.</code></pre>
+</div>
+</div>
+<p>Thus I choose to restrict the graph to this subset of words, since it makes it computationally much lighter to handle, without causing much of a loss: Words that only occur in a handful of thesis titles probably wouldn’t add much to the analysis anyway.</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mainwords <span class="op">=</span> allwords[total_wordcounts <span class="op">&gt;</span> wordcount_cutoff]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note also that when making word co-occurrence graphs of texts, co-occurrences are often given more weight if the words are next to each rather than just in the same sentence. I don’t make this distinction since the titles are pretty short anyway, and word orders in titles can be unusual, making proximity less relevant. I also don’t differentiate between the same word appearing in a title once or multiple times.</p>
+<p>For the graph/network, I use the <a href="https://networkx.github.io/">NetworkX</a> package. It represents graphs as adjacency lists, which suits our quite sparse co-occurrence graph well.</p>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>cooc_graph <span class="op">=</span> nx.Graph()</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>cooc_graph.add_nodes_from(mainwords)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> words <span class="kw">in</span> df[<span class="st">"Words"</span>]:</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    words <span class="op">=</span> <span class="bu">tuple</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> w: w <span class="kw">in</span> mainwords, words))</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Loop over all pairs of two words `wi` and `wj` in `words`, but</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># so that `(wi, wi)` are not included, and if `(wi, wj)` is included</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># then `(wj, wi)` is not.</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(words)):</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>        wi <span class="op">=</span> words[i]</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># The second loop starts from i+1 to avoid double-counting.</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(i <span class="op">+</span> <span class="dv">1</span>, <span class="bu">len</span>(words)):</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>            wj <span class="op">=</span> words[j]</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> wi <span class="kw">in</span> cooc_graph[wj]:</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>                <span class="co"># This edge already exists, increment the weight</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>                cooc_graph[wi][wj][<span class="st">"weight"</span>] <span class="op">+=</span> <span class="fl">1.0</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>                <span class="co"># This edge doesn't yet exist, create it.</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>                cooc_graph.add_edge(wi, wj, weight<span class="op">=</span><span class="fl">1.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As we have it now, the edge weights of the graph just count the number of theses in which both words appear. This isn’t quite what we want, since it’s dominated by commonly occuring words. There are several different ways we could normalize the weights. To make a long story short, a choice that I’ve found works well for what I want to do with this graph later is normalizing the edge between A and B by average of the frequencies of A and B. This is symmetric (the graph remains undirected) and roughly speaking gives a large weight for edges that connect two words that appear approximately equally frequently and often together.</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> w1, w2 <span class="kw">in</span> cooc_graph.edges:</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    avg_count <span class="op">=</span> (total_wordcounts[w1] <span class="op">+</span> total_wordcounts[w2]) <span class="op">/</span> <span class="fl">2.0</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    cooc_graph[w1][w2][<span class="st">"weight"</span>] <span class="op">/=</span> avg_count</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, a few convenient functions for studying individual words: Getting example thesis titles with a given word in it, getting related words, and outputting a summary of a word (popularity plot, related words, examples).</p>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_example_titles(word, n<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">""" For a given word `w`, return a tuple of `n` randomly picked thesis</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">    titles that have `w` in it.</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    titles_with_word <span class="op">=</span> df[df[<span class="st">"Words"</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: word <span class="kw">in</span> x)][<span class="st">"Title"</span>]</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">min</span>(n, <span class="bu">len</span>(titles_with_word))</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    examples <span class="op">=</span> <span class="bu">tuple</span>(titles_with_word.sample(n).values)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> examples</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_related_words(w, n<span class="op">=</span><span class="dv">5</span>, weights<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">""" For a given word `w`, get the `n` words with heaviest edges connected</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="co">    to `w` in the co-occurrence graph.  Returns a list of tuples</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="co">    `(neighbour_word, weight)`, sorted by `weight`, or alternatively just a</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="co">    list of `neighbour_word`s if `weights=False`.</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> w <span class="kw">not</span> <span class="kw">in</span> cooc_graph:</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># This word is not in the co-occurrence network.</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> ()</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>    node <span class="op">=</span> cooc_graph[w]</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>    neighbourlist <span class="op">=</span> ((k, v[<span class="st">"weight"</span>]) <span class="cf">for</span> k, v <span class="kw">in</span> node.items())</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>    neighbourlist <span class="op">=</span> <span class="bu">sorted</span>(neighbourlist, key<span class="op">=</span>opr.itemgetter(<span class="dv">1</span>), reverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>    neighbourlist <span class="op">=</span> neighbourlist[:n]</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> weights:</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>        neighbourlist <span class="op">=</span> [w[<span class="dv">0</span>] <span class="cf">for</span> w <span class="kw">in</span> neighbourlist]</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> neighbourlist</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> output_word_summary(w, n_related<span class="op">=</span><span class="dv">3</span>, n_examples<span class="op">=</span><span class="dv">3</span>, plot<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">""" Print and plot (if `plot=True`) a summary of data for the word `w`.</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Word: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(w))</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n_related <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Related words:"</span>)</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> neighbour <span class="kw">in</span> get_related_words(w, n<span class="op">=</span>n_related):</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">" </span><span class="sc">{}</span><span class="st">: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="op">*</span>neighbour))</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n_examples <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Example titles:"</span>)</span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> title <span class="kw">in</span> get_example_titles(w, n<span class="op">=</span>n_examples):</span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">" </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(title))</span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> plot:</span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>        fig, ax1 <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">3</span>))</span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>        ax1.plot(wordcounts_by_year[w], color<span class="op">=</span><span class="st">"black"</span>)</span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="st">"Number and proportion of theses</span><span class="ch">\n</span><span class="st">with '</span><span class="sc">{}</span><span class="st">' in the title"</span>.<span class="bu">format</span>(</span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a>            w</span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>        ax1.set_title(title)</span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>        ax1.set_ylabel(<span class="st">"Absolute number (black)"</span>.<span class="bu">format</span>(w))</span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>        ax1.set_xlabel(<span class="st">"Year"</span>)</span>
+<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a>        ax2 <span class="op">=</span> ax1.twinx()</span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a>        ax2.plot(wordratios_by_year[w], color<span class="op">=</span><span class="st">"darkred"</span>)</span>
+<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a>        ax2.set_ylabel(<span class="st">"Per 1000 theses (red)"</span>.<span class="bu">format</span>(w))</span>
+<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a>        fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="buzzwords-from-the-past" class="level3">
+<h3 class="anchored" data-anchor-id="buzzwords-from-the-past">Buzzwords from the past</h3>
+<p>With all that set-up out of the way, let’s see if these titles hold some interesting. First off, what are the most commonly occuring words in thesis titles, and how does their popularity vary over time?</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>num_topwords <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>topwords <span class="op">=</span> allwords[:num_topwords]</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>topword_ratios <span class="op">=</span> wordratios_by_year.loc[:, topwords]</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare to a format that sns.FacetGrid likes.</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>topword_ratios <span class="op">=</span> (</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    topword_ratios.unstack()</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    .rename(columns<span class="op">=</span>{<span class="dv">0</span>: <span class="st">"Occurrences per 1000 theses"</span>, <span class="st">"level_0"</span>: <span class="st">"Word"</span>})</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.FacetGrid(</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    topword_ratios, col<span class="op">=</span><span class="st">"Word"</span>, col_wrap<span class="op">=</span><span class="dv">2</span>, sharex<span class="op">=</span><span class="va">True</span>, sharey<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>g.<span class="bu">map</span>(plt.plot, <span class="st">"Year"</span>, <span class="st">"Occurrences per 1000 theses"</span>)</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>g.set_titles(<span class="st">"</span><span class="sc">{col_name}</span><span class="st">"</span>)</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> w <span class="kw">in</span> topwords:</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">50</span>)</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>    output_word_summary(w, plot<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>--------------------------------------------------
+Word: study
+Related words:
+ case: 0.2097815470376635
+ comparative: 0.1153317337503033
+ development: 0.05929317390646284
+Example titles:
+ A study of the macro to micro process of persuasion for advertising in context towards a meso dominant logic model of consumer behaviour
+ A dialogic endeavour : a study of three newly qualified teachers' journeys towards dialogic teaching
+ A finite element and analytical study on reverse channel connection to steel tubular column
+--------------------------------------------------
+Word: studies
+Related words:
+ structural: 0.09210299541553205
+ synthesis: 0.050235956766631146
+ synthetic: 0.048787855902122194
+Example titles:
+ Studies on the SlyA transcription regulators of Escherichia coli and Salmonella typhimurium
+ Some spectroscopic studies with a dye laser
+ Off-site art curating : case studies in Taiwan (1987-2007)
+--------------------------------------------------
+Word: development
+Related words:
+ system: 0.06787693205016039
+ application: 0.06536252134761683
+ role: 0.0598641998380365
+Example titles:
+ Development of protoplast systems for the genetic manipulation of rice
+ Training and support for marketing decision making in retailing : The development of a retail market simulation for use as a training aid and an associated decision support system
+ The Dublin nationalist press and the development of Irish Nationalism, 1842-65
+--------------------------------------------------
+Word: analysis
+Related words:
+ using: 0.06964454230890217
+ data: 0.06052919308987535
+ functional: 0.053515590100955954
+Example titles:
+ Sentencing policy for repeat offenders : a theoretical and empirical analysis
+ Insider dealing and market manipulation : a comparative analysis of regulatory enforcement in the United Kingdom and United States
+ A quantitative analysis of the effect of calcium on oxidative phosphorylation</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="ethos_files/figure-html/cell-27-output-2.svg" class="img-fluid"></p>
+</div>
+</div>
+<p>Nothing too exciting here: Generic terms that appear in all kinds of titles. Both “study” and “studies” have clearly fallen into relative disuse since the 70s.</p>
+<p>Much more interesting than the most popular words are those whose popularity has been fleeting. One could get at this in a million different ways, but here’s one that I found interesting. For each decade, find the top 3 words whose popularity that decade was the most disproportionately large compared to their popularity over all time. In other words, rank words by number of occurrences in a given decade, divided by total number of occurrences. To not have this be dominated by words occurring in only a handful of theses, I further restrict to words with at least 100 occurrences in total. I’ll also print for each word some of the commonly co-occurring words, to give some context.</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>num_topwords <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>occurrence_cutoff <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>notrare_words <span class="op">=</span> total_wordcounts <span class="op">&gt;</span> occurrence_cutoff</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start_year <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1930</span>, <span class="dv">2020</span>, <span class="dv">10</span>):</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    end_year <span class="op">=</span> start_year <span class="op">+</span> <span class="dv">10</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="sc">{}</span><span class="st">s:"</span>.<span class="bu">format</span>(start_year))</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    decade_top_words <span class="op">=</span> (</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>        wordcounts_by_year.loc[start_year:end_year, notrare_words].<span class="bu">sum</span>()</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">/</span> total_wordcounts</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    ).sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> w <span class="kw">in</span> decade_top_words.index[:num_topwords]:</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>        neighbours <span class="op">=</span> get_related_words(w, n<span class="op">=</span><span class="dv">3</span>, weights<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"</span><span class="sc">{:15}</span><span class="st">  </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(w, neighbours))</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">79</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1930s:
+notes            ['introduction', 'glossary', 'edited']
+solvents         ['eutectic', 'nonpolar', 'nonaqueous']
+prognosis        ['diagnosis', 'aetiology', 'infarction']
+-------------------------------------------------------------------------------
+1940s:
+substances       ['humic', 'pectic', 'psychoactive']
+constitution     ['alloys', 'constitutional', 'discursive']
+cases            ['hundred', 'review', 'report']
+-------------------------------------------------------------------------------
+1950s:
+radioactive      ['disposal', 'tracer', 'waste']
+substances       ['humic', 'pectic', 'psychoactive']
+constituents     ['nitrogenous', 'milk', 'leaves']
+-------------------------------------------------------------------------------
+1960s:
+elementary       ['particles', 'particle', 'physics']
+polysaccharides  ['algal', 'pectic', 'enzymic']
+bubble           ['chamber', 'columns', 'coalescence']
+-------------------------------------------------------------------------------
+1970s:
+gevc             ['kp', '10', '16']
+prostaglandins   ['parturition', 'leucocytes', 'menstruation']
+ultrastructure   ['cytochemistry', 'histochemistry', 'cytology']
+-------------------------------------------------------------------------------
+1980s:
+microprocessor   ['pwm', 'inverter', 'drive']
+monoclonal       ['antibodies', 'antibody', 'antigens']
+diagenesis       ['sedimentology', 'sandstones', 'jurassic']
+-------------------------------------------------------------------------------
+1990s:
+objectoriented   ['database', 'databases', 'query']
+atm              ['traffic', 'congestion', 'switch']
+lipoprotein      ['lipase', 'density', 'cholesterol']
+-------------------------------------------------------------------------------
+2000s:
+globalisation    ['era', 'firmlevel', 'olympic']
+internet         ['banking', 'online', 'protocol']
+ict              ['adoption', 'teachers', 'technology']
+-------------------------------------------------------------------------------
+2010s:
+graphene         ['epitaxial', 'nanoelectronics', 'nanotubes']
+mindfulness      ['selfcompassion', 'meditation', 'dispositional']
+resilience       ['socialecological', 'disaster', 'vulnerability']
+-------------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<p>The 30s, 40s, and 50s look quite similar, with pretty generic terminology, especially science terminology, trending high, but from that point on things get more specialised and interesting. Plenty of particle physics terminology is featured in the 60s and 70s (a bubble chamber is a type of particle physics experiment and GeV/c, gigaelectronvolts per speed of light, is a a unit for momentum in particle physics), when new particles were constantly being discovered. The 80s, 90s and 2000s have a lot of computer science and communication technology words in the lead (ATM in most cases stands for asynchronous transfer mode). They give way to “mindfulness” and “resilience” in the 2010s, nicely reflecting changing cultural themes and attitudes in the past decade. Many of the words are also directly related to breakthroughs that generated flurries of research activity in their wake, such as monoclonal antibodies and graphene, which both lead to a Nobel Prize within a few years of discovery.</p>
+<p>Notable is also the relative lack of social sciences and humanities vocabulary. We’ll come back to this later when studying popularities of academic fields.</p>
+<p>The prospective rabbit holes here are endless, but just for highlighting, here’s a bit more detail on a few select words from the above list.</p>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>selectwords <span class="op">=</span> [<span class="st">"bubble"</span>, <span class="st">"diagenesis"</span>, <span class="st">"globalisation"</span>, <span class="st">"mindfulness"</span>]</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>selectword_ratios <span class="op">=</span> wordratios_by_year.loc[:, selectwords]</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare to a format that sns.FacetGrid likes.</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>selectword_ratios <span class="op">=</span> (</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    selectword_ratios.unstack()</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    .rename(columns<span class="op">=</span>{<span class="dv">0</span>: <span class="st">"Occurrences per 1000 theses"</span>, <span class="st">"level_0"</span>: <span class="st">"Word"</span>})</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.FacetGrid(</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    selectword_ratios, col<span class="op">=</span><span class="st">"Word"</span>, col_wrap<span class="op">=</span><span class="dv">2</span>, sharex<span class="op">=</span><span class="va">True</span>, sharey<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>g.<span class="bu">map</span>(plt.plot, <span class="st">"Year"</span>, <span class="st">"Occurrences per 1000 theses"</span>)</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>g.set_titles(<span class="st">"</span><span class="sc">{col_name}</span><span class="st">"</span>)</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> w <span class="kw">in</span> selectwords:</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">50</span>)</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    output_word_summary(w, plot<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>--------------------------------------------------
+Word: bubble
+Related words:
+ chamber: 0.23267326732673269
+ columns: 0.0691358024691358
+ coalescence: 0.060836501901140684
+Example titles:
+ It's time to kick a** and chew bubble gum : an ideological critique of narrative in action games
+ Phytoplankton induced changes of air bubble residence time in seawater
+ Bubble coalescence from multiple entry nozzles in fluidized beds
+--------------------------------------------------
+Word: diagenesis
+Related words:
+ sedimentology: 0.14255765199161424
+ sandstones: 0.10810810810810811
+ jurassic: 0.07514450867052024
+Example titles:
+ The sedimentology and diagenesis of copper-bearing rocks of the southern margin of the Damaran Orogenic Belt, Namibia and Botswana
+ The sedimentology and diagenesis of the Kullsberg and Boda Limestones, Siljan District, Central Sweden
+ Modelling vadose diagenesis of holocene carbonate sands
+--------------------------------------------------
+Word: globalisation
+Related words:
+ era: 0.04203152364273205
+ firmlevel: 0.03319502074688797
+ olympic: 0.028169014084507043
+Example titles:
+ Babels, the social forum and the conference : interpreting community overlapping and competing narratives on activism and interpreting in the era of globalisation
+ Globalisation, structural adjustment and small and micro-sized enterprises in Malawi
+ The role of the central bank of Libya in the era of globalisation
+--------------------------------------------------
+Word: mindfulness
+Related words:
+ selfcompassion: 0.08974358974358974
+ meditation: 0.06666666666666667
+ dispositional: 0.03125
+Example titles:
+ Mindfulness, attachment &amp; adoptive parenting: is there a connection?
+ The development of self-criticism and the effects of self-compassion and mindfulness on the well-being of mothers
+ Psychological well-being, and mindfulness, in parents of children with autism</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="ethos_files/figure-html/cell-29-output-2.svg" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="identifying-fields-of-research-from-titles" class="level2">
+<h2 class="anchored" data-anchor-id="identifying-fields-of-research-from-titles">Identifying fields of research from titles</h2>
+<p>Individual words like those above tell us stories of individual scientific discoveries and hot topics, but they have their limits if we want to study larger academic trends. However, one would naturally expect the co-occurrences of words in titles to follow patterns, where words typical to research fields and subfields would often appear together. Our next goal is to see if this indeed happens, and assuming it does (yes, it does), use it to * identify what are the academic field distinctions that the co-occurrence graph holds. * analyse how the popularities of these different fields have varied.</p>
+<p>So we want to find groups of words that typically appear together. This could be called clustering, but in the context of networks/graphs like our co-occurrence graph, it usually goes by the name of community structure. There’s plenty of research done on algorithms for identifying communities. I use below one quite well-known one, the <a href="https://arxiv.org/abs/0803.0476">Louvain algorithm</a>, which is a heuristic algorithm based on optimizing the modularity of the graph, i.e.&nbsp;minimizing the weight of edges connecting different communities and maximizing the weight of edges internal to communities. I tried a few other methods as well, most notably label-propagation and stochastic block models, but at least with the parameters that I tried they seemed to produce communities that were either very small or did not match well my human intuition of which words I would expect to be related.</p>
+<p>If you are running this notebook yourself, you can safely go make a cup of tea at this point. The community finding takes around 5 minutes on my laptop.</p>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>partition <span class="op">=</span> community.best_partition(cooc_graph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># community.best_partition returns a dictionary of {word: community_label}.</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Lets turn that into a DataFrame and extract the lists of words belonging to each community.</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>community_labels <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"Label"</span>: <span class="bu">tuple</span>(partition.values())},</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>partition.keys(),</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span><span class="st">"category"</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>communities <span class="op">=</span> <span class="bu">tuple</span>(</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span>(<span class="bu">tuple</span>, community_labels.groupby(<span class="st">"Label"</span>).groups.values())</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s take a look at what we found.</p>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of communities: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="bu">len</span>(communities)))</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Numbers of words in the communities:"</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([<span class="bu">len</span>(c) <span class="cf">for</span> c <span class="kw">in</span> communities])</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Some example words from each community:"</span>)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>num_example_words <span class="op">=</span> <span class="dv">40</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> communities:</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(c[:num_example_words], end<span class="op">=</span><span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of communities: 12
+Numbers of words in the communities:
+[3571, 5796, 3, 5085, 2912, 8, 4189, 2, 9, 4, 2, 3]
+Some example words from each community:
+('study', 'development', 'analysis', 'investigation', 'case', 'social', 'between', 'reference', 'use', 'behaviour', 'approach', 'theory', 'management', 'new', 'model', 'aspects', 'performance', 'education', 'factors', 'impact', 'evaluation', 'learning', 'english', 'health', 'policy', 'british', 'towards', 'special', 'influence', 'uk', 'change', 'practice', 'england', 'assessment', 'children', 'production', 'process', 'political', 'comparative', 'relationship')
+
+('studies', 'using', 'systems', 'control', 'modelling', 'design', 'synthesis', 'system', 'properties', 'novel', 'structure', 'application', 'applications', 'high', 'models', 'based', 'methods', 'dynamics', 'structural', 'techniques', 'processes', 'flow', 'data', 'experimental', 'networks', 'metal', 'power', 'problems', 'reactions', 'energy', 'processing', 'structures', 'materials', 'surface', 'related', 'compounds', 'water', 'measurement', 'optical', 'magnetic')
+
+('script', 'handwriting', 'cursive')
+
+('early', 'history', 'century', 'contemporary', 'late', 'art', 'modern', 'war', 'music', 'literature', 'representation', 'writing', 'fiction', 'historical', 'works', 'poetry', 'american', 'french', 'representations', 'interpretation', 'de', 'religious', 'john', 'thought', 'literary', 'greek', 'church', 'significance', 'period', 'theology', 'narrative', 'german', 'place', 'irish', 'philosophy', 'roman', 'christian', 'old', 'translation', 'france')
+
+('evolution', 'l', 'distribution', 'ecology', 'scotland', 'central', 'species', 'north', 'population', 'plant', 'spatial', 'soil', 'southern', 'region', 'marine', 'western', 'sea', 'area', 'climate', 'plants', 'conservation', 'eastern', 'populations', 'diversity', 'soils', 'ecological', 'temporal', 'landscape', 'forest', 'upper', 'lower', 'river', 'microbial', 'variability', 'fish', 'reconstruction', 'basin', 'origin', 'wheat', 'atlantic')
+
+('blowfly', 'calliphora', 'meigen', 'attractive', 'calliphoridae', 'lucilia', 'sericata', 'vicina')
+
+('role', 'effects', 'human', 'characterisation', 'molecular', 'effect', 'cell', 'cells', 'growth', 'disease', 'during', 'regulation', 'function', 'interactions', 'protein', 'mechanisms', 'genetic', 'response', 'gene', 'cancer', 'expression', 'functional', 'potential', 'treatment', 'activity', 'metabolism', 'responses', 'proteins', 'identification', 'stress', 'patients', 'rat', 'acid', 'resistance', 'dna', 'associated', 'biological', 'changes', 'receptor', 'vitro')
+
+('legionella', 'pneumophila')
+
+('bath', 'capsulatus', 'methylotrophic', 'obligate', 'methylococcus', 'methanotrophs', 'ob3b', 'methylosinus', 'trichosporium')
+
+('es', 'dar', 'frustration', 'salaam')
+
+('myxococcus', 'xanthus')
+
+('implantable', 'cardioverter', 'defibrillator')
+</code></pre>
+</div>
+</div>
+<p>So according to the Louvain algorithm, our co-occurrence graph has 19 communities, out of 5 are non-tiny. I’ll just discard the 14 small ones as uninteresting (not every word needs to be in a community, recall that our graph only includes the ~20,000 most common words anyway), and focus on the 5 big ones.</p>
+<p>Gladly, they make quite good sense to human intuition. The first one has a lot of social sciences vocabulary in it, we’ll call it Social; the second one is clearly hard sciences, maths, and engineering or just Science for short; the second is medicine and biochemistry, aka Biomed; the fourth one clearly Humanities; and the fifth has a theme of ecology and geography, and we’ll call it Eco/Geo.</p>
+<p>At this point a note about stability of these communities is in order. I’ve been running the same community finding on graphs made with only subsets of the data set, leaving out some of the theses, and also tried including more or less words in the co-occurrence graph (remember we picked the arbitrary cutoff of only including words with at least 10 occurrences). The main communities fortunately appear quite stable under such perturbations. Including somewhat less words or less theses sometimes makes Humanities merge with Social sciences, but otherwise the communities stay roughly as they are. Going the other way, including more rare words in the graph may for instance sometimes cause particle physics to separate from the rest of Science. These kinds of granularity differences, of whether a field splits into a further subfields or merges with its academic neighbour, is quite natural, and doesn’t in my view undermine the analysis in any significant way.</p>
+<p>Next, what we would like to do is assign to each word and thesis title a score or label, that would tell us roughly which field(s) it belongs in. The naive way would be to just label each word with its respective community, and count e.g.&nbsp;how many Humanities words appear in a given title. This doesn’t seem quite fair though. Clearly some words are in some sense more “deeply” in each community. For instance the word “theory” gets grouped into social sciences, but obviously it occurs in other contexts as well, unlike the word “policy”, which is pretty dead giveaway. To account for this effect, I give each word a score for how strongly they are connected to each community. This score starts out being 1 for the community the word belongs in and 0 for the others. I then add to it the total weight of edges connecting this word to words in a given community. So a word that is in the Humanities community and co-occurs mostly with other Humanities words gets a high Humanities-score, whereas a word that co-occurs with words from several different communities will have significant scores for all of them. Finally, we’ll normalize the scores by the total sum within a field, so for instance the Social score of each word will be divided by the sum of Social scores of all words. This accounts for the fact that some fields include more words, and these words may be more strongly connected in our co-occurrence graph. We’ll also multiply the resulting scores by 10,000, just to produce more human-readable numbers.</p>
+<p>First off, use some key words in each community to anchor the names of the fields.</p>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>field_keywords <span class="op">=</span> {</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"education"</span>: <span class="st">"Social"</span>,</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cell"</span>: <span class="st">"Biomed"</span>,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"magnetism"</span>: <span class="st">"Science"</span>,</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ecology"</span>: <span class="st">"Eco/Geo"</span>,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"philosophy"</span>: <span class="st">"Humanities"</span>,</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For the field scores, first give each word a score of 1.0 for the community it belongs in according to the Louvain classification. Drop all the small communities we don’t care about, and name the columns of the DataFrame with the names given above.</p>
+<div class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>wordscores <span class="op">=</span> pd.get_dummies(community_labels).astype(np.float_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the columns whose names are in field_keywords.</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> word, field <span class="kw">in</span> field_keywords.items():</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    current_label <span class="op">=</span> wordscores.loc[word, :].idxmax()</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    wordscores.rename(columns<span class="op">=</span>{current_label: field}, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop all other columns.</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> wordscores.columns:</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> c <span class="kw">in</span> field_keywords.values():</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>        wordscores.drop(c, axis<span class="op">=</span><span class="dv">1</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>fieldnames <span class="op">=</span> wordscores.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then add to the scores the weights of the edges connecting each word to words in different communities. This is easy to do with a matrix product with the adjacency matrix of the graph.</p>
+<p>To give an example, “tunnel” belongs to the Science community, so it starts out having a score of 1.0 for Science and 0.0 for the other fields. It has graph edges connecting it to many other Science words, that increase it Science score, but it also has an edge with weight 0.043 connecting it to “boring”, which is an Eco/Geo word, and thus we add 0.043 to the Eco/Geo score of “tunnel”.</p>
+<div class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># So to get the scores we want, we need to take the matrix product of the</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co"># adjacency matrix of the co-occurrence graph with the current score matrix,</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co"># wordscores.values. The graph is way too big to build the whole adjacency</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix as a dense matrix, but luckily NetworkX has us covered, with the</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="co"># possibility of creating a scipy sparse matrix instead. However, the pandas</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="co"># dot function for matrix products insists on converting everything to a dense</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix to do the product, so we'll have to manually work with the</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="co"># scipy.sparse matrix instead of a DataFrame. It's not too bad though.</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>adjacency_matrix <span class="op">=</span> nx.to_scipy_sparse_matrix(</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    cooc_graph, nodelist<span class="op">=</span>wordscores.index, <span class="bu">format</span><span class="op">=</span><span class="st">"csr"</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> fieldnames:</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>    column_vec <span class="op">=</span> wordscores[c].to_numpy()</span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> adjacency_matrix.dot(column_vec)</span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>    scores_series <span class="op">=</span> pd.Series(scores, index<span class="op">=</span>wordscores.index)</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>    wordscores[c] <span class="op">+=</span> scores_series</span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> adjacency_matrix  <span class="co"># Release the memory</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, normalize the scores, and give all the words we did not include in our graph (the ones with fewer than 10 occurrences) a score of 0.0 for everything.</p>
+<div class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>wordscores <span class="op">*=</span> <span class="dv">10000</span> <span class="op">/</span> wordscores.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>wordscores <span class="op">=</span> wordscores.reindex(allwords, fill_value<span class="op">=</span><span class="fl">0.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To check that the scoring system makes sense, let’s print out the top words for each field.</p>
+<div class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>num_topwords <span class="op">=</span> <span class="dv">6</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> fieldnames:</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Words with highest scores for </span><span class="sc">{}</span><span class="st">:"</span>.<span class="bu">format</span>(c))</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(wordscores.sort_values(c, ascending<span class="op">=</span><span class="va">False</span>)[:num_topwords])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Words with highest scores for Social:
+               Social   Science  Humanities   Eco/Geo    Biomed
+education    6.731376  0.338529    1.075394  0.278021  0.246520
+case         6.720405  0.670708    1.115557  0.838112  0.362805
+experiences  6.514327  0.301990    0.768338  0.187945  0.619091
+school       6.511356  0.346066    0.837274  0.252485  0.322448
+students     6.465365  0.373327    0.767093  0.161477  0.249918
+health       6.291271  0.558116    0.540989  0.456644  1.104925
+
+Words with highest scores for Science:
+           Social   Science  Humanities   Eco/Geo    Biomed
+using    2.144769  4.513893    0.255842  0.800599  1.597836
+high     1.375398  4.493449    0.207765  0.573075  0.819977
+laser    0.335986  4.286527    0.056770  0.174174  0.474995
+flow     0.745474  4.207198    0.100316  0.768102  0.752596
+optical  0.435236  4.200290    0.065576  0.179316  0.406189
+metal    0.414927  4.159745    0.105288  0.547319  0.566328
+
+Words with highest scores for Humanities:
+             Social   Science  Humanities   Eco/Geo    Biomed
+century    2.223286  0.275921    4.791743  0.554988  0.204375
+centuries  0.923251  0.203234    4.601002  0.512681  0.123067
+john       0.943592  0.176675    4.361881  0.254577  0.111745
+theology   1.081867  0.166359    4.314587  0.126718  0.166359
+works      1.210343  0.304668    4.116588  0.227637  0.182434
+edition    0.477223  0.139778    4.086261  0.199721  0.158661
+
+Words with highest scores for Eco/Geo:
+                 Social   Science  Humanities   Eco/Geo    Biomed
+l              0.814354  0.553409    0.207595  7.819194  1.610956
+basin          0.834411  0.484548    0.422318  6.548860  0.159123
+atlantic       0.687575  0.586134    0.414219  6.028435  0.592498
+geochemistry   0.376414  0.492303    0.213058  5.996695  0.102179
+sedimentology  0.321300  0.192107    0.219387  5.933964  0.110009
+brassica       0.172646  0.184549    0.040368  5.910906  0.684815
+
+Words with highest scores for Biomed:
+              Social   Science  Humanities   Eco/Geo    Biomed
+cells       0.604380  1.137227    0.065667  0.299891  6.330380
+cell        0.772245  1.137483    0.079115  0.432924  6.175816
+receptor    0.406578  0.459957    0.046829  0.177914  6.005708
+rat         0.526634  0.546445    0.060796  0.286645  5.793375
+expression  0.670508  0.520471    0.238901  0.631464  5.787666
+gene        0.580172  0.602038    0.077047  0.681121  5.709657</code></pre>
+</div>
+</div>
+<p>There’s a few funny ones, like “L” being the top word in Eco/Geo because it often stands for Carl Linnaeus, the founder of modern taxonomy, in scientific names of species, but overall the scores seem pretty reasonable.</p>
+<p>Next up, computing the scores for each thesis title, by just taking the average of the scores of individual words in the title. This takes a minute or so.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> fieldnames:</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Computing title scores for </span><span class="sc">{}</span><span class="st">."</span>.<span class="bu">format</span>(c))</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Interestingly the python sum function is significantly faster here than a</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># sub-DataFrame.sum(). Probably due to allocation of temporaries.</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>    df[c] <span class="op">=</span> df[<span class="st">"Words"</span>].<span class="bu">apply</span>(</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> ws: <span class="fl">0.0</span>  <span class="co"># Special case to avoid divison by zero.</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> ws</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="bu">sum</span>(wordscores.loc[w, c] <span class="cf">for</span> w <span class="kw">in</span> ws) <span class="op">/</span> <span class="bu">len</span>(ws)</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Computing title scores for Social.</code></pre>
+</div>
+</div>
+</section>
+<section id="trends-in-academic-fields" class="level2">
+<h2 class="anchored" data-anchor-id="trends-in-academic-fields">Trends in academic fields</h2>
+<p>With each thesis scored on all the academic fields, it’s time to see what this data tells us. Let’s first see how the scores are distributed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>bins <span class="op">=</span> <span class="dv">30</span>  <span class="co"># For histograms</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>maxscore <span class="op">=</span> <span class="dv">5</span>  <span class="co"># Max score to show on the plot</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> custom_light_palette(color):</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">""" A color palette a bit like seaborn.light_palette, but starts from pure</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="co">    white and goes to darker shades.</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    start <span class="op">=</span> sns.set_hls_values(color, l<span class="op">=</span><span class="fl">1.0</span>)</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    end <span class="op">=</span> sns.set_hls_values(color, l<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    colors <span class="op">=</span> [start, color, end]</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sns.blend_palette(colors, as_cmap<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hist2d(x, y, color, <span class="op">**</span>kwargs):</span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>    cmap <span class="op">=</span> custom_light_palette(color)</span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> [[<span class="dv">0</span>, maxscore]] <span class="op">*</span> <span class="dv">2</span></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>    plt.hist2d(x, y, bins<span class="op">=</span>bins, <span class="bu">range</span><span class="op">=</span>rng, cmap<span class="op">=</span>cmap, <span class="op">**</span>kwargs)</span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hist(x, color, <span class="op">**</span>kwargs):</span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> [<span class="dv">0</span>, maxscore]</span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>    plt.hist(x, lw<span class="op">=</span><span class="fl">0.0</span>, bins<span class="op">=</span>bins, <span class="bu">range</span><span class="op">=</span>rng, <span class="op">**</span>kwargs)</span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a><span class="co"># A color palette for printing the correlation numbers.</span></span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a>corr_palette <span class="op">=</span> sns.diverging_palette(</span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>    <span class="dv">10</span>, <span class="dv">220</span>, s<span class="op">=</span><span class="dv">99</span>, l<span class="op">=</span><span class="dv">50</span>, center<span class="op">=</span><span class="st">"dark"</span>, as_cmap<span class="op">=</span><span class="va">True</span></span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> corr(x, y, color, <span class="op">**</span>kwargs):</span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">""" Given two Series, compute their correlation and produce a pyplot plot</span></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="co">    that just has that number as text in the middle, and nothing else.</span></span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a>    corr <span class="op">=</span> x.corr(y)</span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a>    corr_str <span class="op">=</span> <span class="st">"</span><span class="sc">{:.3f}</span><span class="st">"</span>.<span class="bu">format</span>(corr)</span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a>    color <span class="op">=</span> corr_palette(corr <span class="op">+</span> <span class="fl">0.5</span>)</span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a>    plt.plot()</span>
+<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> plt.gca()</span>
+<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a>    plt.text(</span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a>        <span class="fl">0.5</span>,</span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a>        <span class="fl">0.5</span>,</span>
+<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a>        corr_str,</span>
+<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a>        horizontalalignment<span class="op">=</span><span class="st">"center"</span>,</span>
+<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a>        verticalalignment<span class="op">=</span><span class="st">"center"</span>,</span>
+<span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a>        transform<span class="op">=</span>ax.transAxes,</span>
+<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span>color,</span>
+<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> spine <span class="kw">in</span> ax.spines.values():</span>
+<span id="cb50-51"><a href="#cb50-51" aria-hidden="true" tabindex="-1"></a>        spine.set_visible(<span class="va">False</span>)</span>
+<span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a>    ax.tick_params(axis<span class="op">=</span><span class="st">"both"</span>, which<span class="op">=</span><span class="st">"both"</span>, length<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-55"><a href="#cb50-55" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">"white"</span>)  <span class="co"># We use a different style for this plot than most.</span></span>
+<span id="cb50-56"><a href="#cb50-56" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.PairGrid(df[fieldnames], height<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a>g.map_upper(corr)</span>
+<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a>g.map_lower(hist2d)</span>
+<span id="cb50-59"><a href="#cb50-59" aria-hidden="true" tabindex="-1"></a>g.map_diag(hist)</span>
+<span id="cb50-60"><a href="#cb50-60" aria-hidden="true" tabindex="-1"></a>g.<span class="bu">set</span>(ylim<span class="op">=</span>(<span class="dv">0</span>, maxscore), xlim<span class="op">=</span>(<span class="dv">0</span>, maxscore))</span>
+<span id="cb50-61"><a href="#cb50-61" aria-hidden="true" tabindex="-1"></a>ticks <span class="op">=</span> [<span class="fl">0.0</span>, maxscore <span class="op">/</span> <span class="dv">2</span>, maxscore]</span>
+<span id="cb50-62"><a href="#cb50-62" aria-hidden="true" tabindex="-1"></a>g.<span class="bu">set</span>(xticks<span class="op">=</span>ticks, yticks<span class="op">=</span>ticks)</span>
+<span id="cb50-63"><a href="#cb50-63" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">"darkgrid"</span>)  <span class="co"># Back to the usual style.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here on the diagonal are histograms showing the distribution of theses over the score for each field. Above the diagonal, the single numbers shown there are correlation coefficients between the field scores. For instance since the second row of plots is for Science and the fourth column is for Humanities, the number at their intersection, around -0.5, is the correlation coefficient between Science and Humanities scores. Mirroring these correlation coefficients, below the diagonal are 2D histograms showing the distribution of theses over two different field scores.</p>
+<p>Looking first at the 1D histograms on the diagonal, note that the first peak in each of them is not the interesting part. Since I smudged the boundaries of fields by adding neighbouring edge weights when scoring words, most words have a non-zero score for all the fields. The first peaks then represent a sort of baseline value, of what’s a usual score for a thesis that isn’t really in that field. The interesting bits are the fat tails, the bulges, around scores of 2 and more. They represent the theses that score unusually high for a given field.</p>
+<p>The next observation is that the distributions for different fields are very different. This is natural, given that some (e.g.&nbsp;Eco/Geo) are much more specific than others (e.g.&nbsp;Science). This does mean though that, despite our best attempts to normalize the scores meaningfully, we probably shouldn’t assign much meaning to statements like “this thesis has a much higher Humanities than Social score”, but rather concentrate on correlations and trends that are independent of the overall scale of the scores.</p>
+<p>The correlations tell us a lot about how distinct the different fields are. The highest positive correlation is between Humanities and Social sciences, which isn’t very surprising, and goes together with my observation that sometimes the two fields fuse in the community finding analysis if a smaller data set is used. They both are heavily anti-correlated with Science and Biomed, again matching intuitive expectation. The one thing that somewhat surprises me is that Science, Biomed, and Eco/Geo are virtually independent of each other: I would have guessed topics like chemistry and population biology to cause some mixing between them. This is good though, since it makes the 5-way scoring more meaningful, when the scores aren’t predictable from each other. The 2D histograms below the diagonal provide a more detailed visual picture of what is summarised by the correlation coefficients.</p>
+<p>Being pretty happy with our scoring method, lets see what trends we can detect over time and institutions.</p>
+<p>First off, here are the mean scores of theses published in each year.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>meanscores_by_year <span class="op">=</span> df.groupby([<span class="st">"Year"</span>]).mean().fillna(<span class="fl">0.0</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare to a format that sns.FacetGrid likes.</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>meanscores_by_year <span class="op">=</span> (</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    meanscores_by_year.unstack()</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    .rename(columns<span class="op">=</span>{<span class="dv">0</span>: <span class="st">"Mean score"</span>, <span class="st">"level_0"</span>: <span class="st">"Field"</span>})</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.FacetGrid(</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>    meanscores_by_year,</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>    col<span class="op">=</span><span class="st">"Field"</span>,</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>    col_wrap<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>    col_order<span class="op">=</span>fieldnames,</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>    sharex<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>    sharey<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="fl">2.0</span>,</span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>    aspect<span class="op">=</span><span class="fl">1.8</span>,</span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>g.<span class="bu">map</span>(plt.plot, <span class="st">"Year"</span>, <span class="st">"Mean score"</span>)</span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>g.set_titles(<span class="st">"</span><span class="sc">{col_name}</span><span class="st">"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can see at least three clear trends here. * Social sciences first decline in popularity until around 1970, after which they start bouncing back, and have been growing to this day. Humanities follow a more mellow development of roughly the same shape. * Contrasting with that, Science follows an almost opposite development, rising and then falling. Especially notable is the big bulge around the turning point, in the 60s. * Eco/Geo follows a pretty steady pattern until the 80s, after which it has settled into a decline, that may have leveled off as of late.</p>
+<p>The reversal of the Social/Humanities vs Science trend in the 60s coincides roughly with the explosion of PhD production from smaller institutions that we observed earlier, but I’m unsure as to how that connection should be interpreted, and whether these events truly are connected. Regardless, the V-shaped competing curves of soft vs hard fields is clearly the grand narrative in these plots. It would be very interesting to try to compare it to other societal and academic trends, such as gender distributions of PhD graduates, changes in academic funding in the UK, and data on students at earlier stages in their education, such as the popularity of different undergraduate majors and changes in primary and secondary education curricula. For the moment, though, this remains work-to-be-done.</p>
+<p>Finally, we can observe academic trends for individual institutions. For instance, here are the same plots as above, but specific to some of the golden triangle universities.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>select_insts <span class="op">=</span> [</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"University of Cambridge"</span>,</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Imperial College London"</span>,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"University of Oxford"</span>,</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"London School of Economics and Political Science (University of London)"</span>,</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>meanscores_by_yearandinst <span class="op">=</span> (</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    df[df.Institution.<span class="bu">apply</span>(<span class="kw">lambda</span> x: x <span class="kw">in</span> select_insts)]</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>    .groupby([<span class="st">"Institution"</span>, <span class="st">"Year"</span>])</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>    .mean()  <span class="co"># Average scores for each year and institution</span></span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>    .unstack(<span class="st">"Institution"</span>)</span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>    .fillna(<span class="fl">0.0</span>)</span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Rolling Gaussian average with std=3.0.</span></span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>    .rolling(<span class="dv">10</span>, center<span class="op">=</span><span class="va">True</span>, win_type<span class="op">=</span><span class="st">"gaussian"</span>)</span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>    .mean(std<span class="op">=</span><span class="fl">3.0</span>)</span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>    .dropna()  <span class="co"># Rolling average causes some NaNs at the ends.</span></span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Prepare to a format that sns.FacetGrid likes.</span></span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>    .stack(level<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
+<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a>    .rename(columns<span class="op">=</span>{<span class="st">"level_1"</span>: <span class="st">"Field"</span>, <span class="dv">0</span>: <span class="st">"Mean score"</span>})</span>
+<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.FacetGrid(</span>
+<span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a>    meanscores_by_yearandinst,</span>
+<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a>    col<span class="op">=</span><span class="st">"Field"</span>,</span>
+<span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a>    col_order<span class="op">=</span>fieldnames,</span>
+<span id="cb52-26"><a href="#cb52-26" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">"Institution"</span>,</span>
+<span id="cb52-27"><a href="#cb52-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># We pick a specific order for the institutions so that with the default</span></span>
+<span id="cb52-28"><a href="#cb52-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># color scheme the colors roughly match the official colors of the</span></span>
+<span id="cb52-29"><a href="#cb52-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># universities (Oxford is blue, Cambridge is red).</span></span>
+<span id="cb52-30"><a href="#cb52-30" aria-hidden="true" tabindex="-1"></a>    hue_order<span class="op">=</span>[</span>
+<span id="cb52-31"><a href="#cb52-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"University of Oxford"</span>,</span>
+<span id="cb52-32"><a href="#cb52-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Imperial College London"</span>,</span>
+<span id="cb52-33"><a href="#cb52-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">"London School of Economics and Political Science (University of London)"</span>,</span>
+<span id="cb52-34"><a href="#cb52-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"University of Cambridge"</span>,</span>
+<span id="cb52-35"><a href="#cb52-35" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb52-36"><a href="#cb52-36" aria-hidden="true" tabindex="-1"></a>    col_wrap<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb52-37"><a href="#cb52-37" aria-hidden="true" tabindex="-1"></a>    sharex<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb52-38"><a href="#cb52-38" aria-hidden="true" tabindex="-1"></a>    sharey<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb52-39"><a href="#cb52-39" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="fl">2.0</span>,</span>
+<span id="cb52-40"><a href="#cb52-40" aria-hidden="true" tabindex="-1"></a>    aspect<span class="op">=</span><span class="fl">1.8</span>,</span>
+<span id="cb52-41"><a href="#cb52-41" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb52-42"><a href="#cb52-42" aria-hidden="true" tabindex="-1"></a>g.<span class="bu">map</span>(plt.plot, <span class="st">"Year"</span>, <span class="st">"Mean score"</span>)</span>
+<span id="cb52-43"><a href="#cb52-43" aria-hidden="true" tabindex="-1"></a>g.set_titles(<span class="st">"</span><span class="sc">{col_name}</span><span class="st">"</span>)</span>
+<span id="cb52-44"><a href="#cb52-44" aria-hidden="true" tabindex="-1"></a>g.add_legend()</span>
+<span id="cb52-45"><a href="#cb52-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Seaborn puts the legend in a silly place, so move it manually.</span></span>
+<span id="cb52-46"><a href="#cb52-46" aria-hidden="true" tabindex="-1"></a>g._legend.set_bbox_to_anchor((<span class="fl">0.78</span>, <span class="fl">0.2</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I’ve chosen to smooth the curves out a bit by doing a Gaussian rolling average of the data over time. Since there aren’t that many theses coming out from a single institution in a single year the plots would look quite noisy and hard to read otherwise.</p>
+<p>Hardly surprisingly, London School of Economics is heavy on humanities and social sciences, and consistently puts out PhD theses that score higher in those fields than other universities. Less obviously, the above plot also provides evidence for the often-heard view that of the Oxbridge two, Cambridge is the more science-heavy one, whereas Oxford leans towards humanities and social sciences. Imperial lives up to its reputation of being a science school first and foremost, but less expected is its huge growth in Biomed in the 90s and early 2000s. <a href="https://en.wikipedia.org/wiki/Imperial_College_London#20th_century">Wikipedia</a> informs us that this is probably due to mergers with several medical institutions around that time.</p>
+</section>
+<section id="epilogue" class="level2">
+<h2 class="anchored" data-anchor-id="epilogue">Epilogue</h2>
+<p>I must say that I’m surprised by how much mileage one could get from just thesis metadata, without even abstracts to work with. This whole project started out as a simple exercise in learning some basic pandas, but quickly grew way beyond my original intentions.</p>
+<p>One could keep exploring trends for individual words and institutions, but beyond that there are a few additional ideas that I have considered, but haven’t gotten around to doing: * Look for thesis titles with abnormal word combinations. Perhaps take the average co-occurrence graph path length between the words in the title, and rank titles based on that. Outlier theses that respect no field boundaries? Yes, please! * Visualize the co-occurrence graph. The main problem here is that the graph is relatively densely connected. It has ~20,000 words in it, and thus some 400 million possible edges, out which, if I recall correctly, around 6% exist with a non-zero weight. I don’t know much about graph visualization, but this sounds to me like a challenge. Visually seeing the words corresponding to different fields cluster would be quite satisfying though. * Dig deeper into community finding algorithms for networks, and see if I can get something other than the Louvain algorithm to work. I already briefly tried some stochastic block models and label propagation, but, not being an expert, my lack of success with them may be entirely due to user errors. * More generally, study the co-occurrence graph further. How small-world is it, what are average path lengths, etc. * Test out some hypotheses for word popularity. For instance, at one point I was considering the hypothesis that humanities and social sciences words have less peaked popularity profiles over time compared to science words. * Combine the data here with some university rankings, and see if I can predict the ranking of a university based on PhD theses coming out of it. Credit to Henri Seijo for proposing this. * Find other data sets that I could combine this analysis with. Especially interesting could be data on academic funding.</p>
+<p>If you want to test any of the above ideas, or otherwise build further on what I’ve done here, you more than welcome to. I would also be interested in hearing about it if you do so: markus@mhauru.org</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
